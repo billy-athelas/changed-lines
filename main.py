@@ -7,11 +7,14 @@ import re
 import json
 import requests
 
+
 class MissingToken(Exception):
     '''Raised when the GitHub token is missing'''
-    
+
+
 class MissingPatchData(Exception):
     '''Raised when the patch data is missing'''    
+
 
 def fetch_patch():
     '''Grabs the patch data from the GitHub API.'''
@@ -26,6 +29,7 @@ def fetch_patch():
         headers=headers
         )
     return git_request.json()
+
 
 def parse_patch_data(patch_data):
     '''Takes the patch data and returns a dictionary of files and the lines'''
@@ -58,6 +62,7 @@ def parse_patch_data(patch_data):
                         final_dict[entry['filename']] = line_array
     return final_dict
 
+
 def get_lines(line_dict):
     '''Takes the dictionary of files and lines and returns a dictionary of files and line numbers'''
     final_dict = {}
@@ -77,6 +82,7 @@ def get_lines(line_dict):
         if line_array:        
             final_dict[file_name] = line_array
     return final_dict
+
 
 if __name__ == "__main__":
     
@@ -112,5 +118,6 @@ if __name__ == "__main__":
     with open(github_output, 'a', encoding='utf-8') as f:
         f.write(
             f'changed_lines={json.dumps(filter_added_lines)}\n' +
-            f'changed_files={filename_list.strip()}\n'
+            f'changed_files={filename_list.strip()}\n' +
+            f'changed_lines_data={json.dumps(added_line_data)}'
             )
